@@ -51,11 +51,12 @@ single 6 GB consumer GPU (NVIDIA RTX 4050).
 
 | Model | Accuracy | QWK | ROUGE-L | BERTScore | s/img |
 |---|---|---|---|---|---|
-| Qwen2-VL-2B (zero-shot) | 31.1% | 0.00 | 0.082 | -0.029 | 9.73 |
-| **+ QLoRA (this model)** | **54.4%** | **0.62** | **0.235** | **0.287** | **4.75** |
+| Qwen2-VL-2B (zero-shot) | 31.1% | 0.00 | 0.081 | 0.000 | 10.6 |
+| **+ QLoRA (this model)** | **66.0%** | **0.76** | **0.253** | **0.309** | **5.6** |
 
 Fine-tuning lifts quadratic weighted kappa (the standard DR metric) from *no
-agreement* to *substantial agreement*, ~3x better explanations, and 2x faster.
+agreement* to *substantial agreement* (0.76), ~3x better explanations, and ~2x
+faster. Input resolution (768 px) was the biggest single lever.
 
 ## Usage
 ```python
@@ -76,8 +77,8 @@ print(tok.decode(out[0][inputs["input_ids"].shape[1]:], skip_special_tokens=True
 
 ## Training
 QLoRA r=16, alpha=16 on all attention + MLP projections (language + vision towers),
-batch size 1 x grad-accum 8, max_seq_length=1024, bf16, 3 epochs. Full run: ~65 min,
-peak 3.52 GB VRAM.
+batch size 1 x grad-accum 8, max_seq_length=1280, images at 768 px, bf16, 4 epochs.
+Full run: ~90 min, peak 3.52 GB VRAM on a 6 GB RTX 4050.
 
 ## Limitations
 Trained/evaluated on IDRiD only (single-centre, 516 images). Proliferative DR

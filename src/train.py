@@ -39,8 +39,8 @@ VQA_PATH = PROJECT_ROOT / "data" / "processed" / "idrid_vqa.json"
 CKPT_DIR = PROJECT_ROOT / "outputs" / "checkpoints"
 
 MODEL_NAME = os.environ.get("IDRID_MODEL", "unsloth/Qwen2-VL-2B-Instruct")
-MAX_SEQ_LEN = 1024
-IMAGE_MAX_SIDE = 512  # resize fundus images to cap visual tokens -> fits 6 GB
+MAX_SEQ_LEN = 1280
+IMAGE_MAX_SIDE = 768  # higher res so small lesions (microaneurysms) are visible; still fits 6 GB
 
 
 # --------------------------------------------------------------------------- #

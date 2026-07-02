@@ -43,7 +43,7 @@ ADAPTER = PROJECT_ROOT / "outputs" / "checkpoints" / "final"
 RESULTS_PATH = PROJECT_ROOT / "outputs" / "evaluation_results.json"
 
 BASE_MODEL = os.environ.get("IDRID_MODEL", "unsloth/Qwen2-VL-2B-Instruct")
-IMAGE_MAX_SIDE = 512
+IMAGE_MAX_SIDE = 768  # must match training resolution
 MAX_NEW_TOKENS = 256
 
 GRADE_Q = ("What is the diabetic retinopathy severity grade (0-4) shown in this "

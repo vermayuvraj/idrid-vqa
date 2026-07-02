@@ -31,7 +31,7 @@ PROJECT_ROOT = Path(__file__).resolve().parents[1]
 ADAPTER = PROJECT_ROOT / "outputs" / "checkpoints" / "final"
 BASE_MODEL = "unsloth/Qwen2-VL-2B-Instruct"
 MANIFEST = PROJECT_ROOT / "data" / "processed" / "idrid_manifest.json"
-IMAGE_MAX_SIDE = 512
+IMAGE_MAX_SIDE = 768  # must match training resolution
 
 DISCLAIMER = "⚠️ **Research purposes only. Not for clinical use.**"
 

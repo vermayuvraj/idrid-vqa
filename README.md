@@ -13,19 +13,20 @@ explanations — trained end-to-end on a single **6 GB consumer GPU** (RTX 4050)
   reasoning, recommendation), **100% Gemini-generated** from IDRiD labels.
 - **Fits 6 GB VRAM** — 4-bit weights, Unsloth gradient checkpointing, batch size 1
   with gradient accumulation 8, `max_seq_length=1024`, bf16 (never fp32).
-  Full 3-epoch fine-tune: **~65 min, peak 3.52 GB VRAM** on an RTX 4050.
+  Full 4-epoch fine-tune at 768 px: **~90 min, peak 3.52 GB VRAM** on an RTX 4050.
 - **Explainable** — outputs a structured report, not just a label.
 - **Cheap & offline** — the demo runs fully locally with no API calls.
 
-## Results (103-image IDRiD test split)
+## Results (103-image IDRiD test split, 768 px)
 | Model | Accuracy | QWK | ROUGE-L | BERTScore | s/img |
 |---|---|---|---|---|---|
-| Qwen2-VL-2B (zero-shot) | 31.1% | 0.00 | 0.082 | −0.029 | 9.73 |
-| **+ QLoRA (ours)** | **54.4%** | **0.62** | **0.235** | **0.287** | **4.75** |
+| Qwen2-VL-2B (zero-shot) | 31.1% | 0.00 | 0.081 | 0.000 | 10.6 |
+| **+ QLoRA (ours)** | **66.0%** | **0.76** | **0.253** | **0.309** | **5.6** |
 
 Fine-tuning lifts the standard DR metric (quadratic weighted kappa) from *no
-agreement* to *substantial agreement*, ~3× better explanations, and 2× faster
-inference — all on a single consumer GPU.
+agreement* to *substantial agreement* (0.76), ~3× better explanations, and ~2×
+faster inference — all on a single consumer GPU. Input resolution was the biggest
+single lever: 512 → 768 px added **+11.6 pts accuracy** at no extra VRAM.
 
 ## Model & data releases
 - 🤗 Model: https://huggingface.co/vermayuvraj/idrid-qwen2vl-2b-qlora

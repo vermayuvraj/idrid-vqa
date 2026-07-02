@@ -25,9 +25,9 @@ ax.text(60, 434, "Fine-tuning Qwen2-VL-2B with QLoRA + a Gemini-built VQA datase
         color=GREY, fontsize=14.5)
 
 cards = [
-    ("QWK · AGREEMENT", "0.62", "from 0.00", TEAL),
-    ("GRADE ACCURACY", "54%", "from 31%", BLUE),
-    ("TRAINED IN", "65 min", "3.5 GB · RTX 4050", TEAL),
+    ("QWK · AGREEMENT", "0.76", "from 0.00", TEAL),
+    ("GRADE ACCURACY", "66%", "from 31%", BLUE),
+    ("TRAINED IN", "90 min", "3.5 GB · RTX 4050", TEAL),
 ]
 x0, y0, w, h, gap = 60, 150, 350, 205, 15
 for i, (label, big, small, acc) in enumerate(cards):

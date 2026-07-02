@@ -12,7 +12,7 @@ Fine-tune `Qwen/Qwen2-VL-2B-Instruct` with QLoRA + Unsloth on the IDRiD dataset 
 
 - GPU: NVIDIA RTX 4050, **6 GB VRAM** (6141 MiB). All training/inference must fit in **≤ 5.5 GB VRAM**.
 - CPU: Intel i7 HX. OS: Windows 11 + **WSL2 Ubuntu** (all Python/CUDA runs in WSL2).
-- Mandatory training config: `load_in_4bit=True`, `use_gradient_checkpointing="unsloth"`, `per_device_train_batch_size=1`, `gradient_accumulation_steps=8`, `max_seq_length=1024`.
+- Mandatory training config: `load_in_4bit=True`, `use_gradient_checkpointing="unsloth"`, `per_device_train_batch_size=1`, `gradient_accumulation_steps=8`. Images at **768 px** with `max_seq_length=1280` (resolution was the biggest accuracy lever: 512→768 px gave +11.6 pts / +0.14 QWK at ~no extra VRAM). Best result: **66.0% acc, QWK 0.76** on the 103-image test split.
 - **Never use float32.** Use **bfloat16** or **4-bit** only.
 
 ## Environment (as provisioned)
