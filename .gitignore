@@ -1,0 +1,34 @@
+# --- data (large / licensed) ---
+data/raw/
+data/processed/*.json
+!data/processed/.gitkeep
+
+# --- model artifacts ---
+outputs/checkpoints/
+outputs/*.json
+!outputs/.gitkeep
+!outputs/evaluation_results.json
+*.safetensors
+*.bin
+
+# --- secrets ---
+.env
+*.key
+
+# --- python ---
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+
+# --- experiment tracking ---
+wandb/
+outputs/*.log
+data/raw/_staging/
+
+# --- misc ---
+.ipynb_checkpoints/
+.DS_Store
+unsloth_compiled_cache/
+~$*

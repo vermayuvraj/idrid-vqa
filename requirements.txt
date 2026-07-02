@@ -1,0 +1,47 @@
+# IDRiD-VQA requirements
+# Target env: WSL2 Ubuntu, Python 3.12, NVIDIA RTX 4050 (CUDA 12.1 wheels).
+#
+# torch/torchvision MUST come from the CUDA 12.1 index. Install them first:
+#   uv pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+# then install the rest from PyPI:
+#   uv pip install -r requirements.txt
+#
+# (torch/torchvision are listed here for the record but are pulled from the cu121 index above,
+#  not from PyPI. Do not `pip install torch` from PyPI or you'll get the wrong CUDA build.)
+
+# --- deep learning / CUDA ---
+torch==2.5.1            # cu121 build — see note above
+torchvision==0.20.1     # cu121 build — see note above
+xformers==0.0.29.post1  # must match torch 2.5.1+cu121
+bitsandbytes==0.49.2    # 4-bit quantization (QLoRA)
+accelerate==1.14.0
+
+# --- fine-tuning stack (versions validated together on 2026-07-02) ---
+unsloth==2025.5.1       # FastVisionModel + memory-efficient QLoRA
+transformers==4.51.3
+peft==0.19.1
+trl==0.15.2             # unsloth 2025.5.1 needs trl<=0.15.2; trl 0.11.x breaks
+                        # the unsloth_zoo GKD-trainer patcher (import error)
+datasets
+
+# --- QA generation / API baselines ---
+google-generativeai   # Gemini 1.5 Flash (QA generation)
+openai                # GPT-4o-mini baseline (optional, needs OPENAI_API_KEY)
+
+# --- demo ---
+gradio
+
+# --- evaluation metrics ---
+rouge-score
+bert-score
+scikit-learn          # QWK (cohen_kappa_score, weights="quadratic")
+scipy
+
+# --- data / plotting / utils ---
+numpy
+pandas
+Pillow
+matplotlib
+seaborn
+wandb
+tqdm

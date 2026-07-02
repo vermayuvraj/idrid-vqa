@@ -1,0 +1,104 @@
+{
+  "base_qwen2vl_2b": {
+    "metrics": {
+      "n": 103,
+      "accuracy": 0.3107,
+      "qwk": 0.0,
+      "rougeL": 0.0823,
+      "bertscore_f1": -0.0285,
+      "grade_parse_failures": 0,
+      "total_inference_s": 1001.82,
+      "sec_per_image": 9.726,
+      "total_cost_usd": 0.0,
+      "cost_per_image_usd": 0.0
+    },
+    "sample_predictions": [
+      {
+        "image_id": "IDRiD_001",
+        "true_grade": 4,
+        "pred_grade": 2,
+        "gold_reason": "The presence of significant microvascular damage associated with PDR indicates high risk of progression to vision-threatening complications like vitreous hemorrhage or neovascular glaucoma.",
+        "pred_reason": "Diabetic retinopathy is a serious condition that can lead to vision loss if left untreated. The severity of diabetic retinopathy can be assessed using a variety of imaging techniques, including fluorescein angiography (FA) and optical coherence tomography (OCT). The clinical reasoning that supports the severity of diabetic retinopathy grade is based on the findings of the imaging tests.\n\nFluorescein angiography (FA) is a imaging technique that shows the blood vessels in the retina. In diabetic retinopathy, the blood vessels in the retina can become damaged or blocked by blood clots or other abnormalities. This can lead to reduced blood flow to the retina, which can cause vision loss. The severity of diabetic retinopathy grade is determined by the extent of damage to the blood vessels in the retina. A higher grade indicates a more severe condition.\n\nOptical coherence tomography (OCT) is another imaging technique that shows the structure of the retina. In diabetic retinopathy, the retina can become thickened or distorted due to the damage caused by blood clots or other abnormalities. This can lead to reduced vision and can be detected using OCT. The severity of diabetic retinopathy grade is determined by the extent of damage to the retina.\n\nIn summary"
+      },
+      {
+        "image_id": "IDRiD_002",
+        "true_grade": 4,
+        "pred_grade": 2,
+        "gold_reason": "This grade confirms proliferative disease, with additional findings suggesting a concurrent risk of macular edema that threatens central visual acuity.",
+        "pred_reason": "Diabetic retinopathy is a serious condition that can lead to vision loss if left untreated. The severity of diabetic retinopathy can be assessed using a variety of imaging techniques, including fundus photography, fluorescein angiography, and optical coherence tomography (OCT).\n\nIn this image, the retina appears to be affected by diabetic retinopathy. The blood vessels in the retina are dilated and appear to be thickened, which is a characteristic feature of diabetic retinopathy. The presence of these changes suggests that the retina is affected by diabetic retinopathy.\n\nThe clinical reasoning that supports this assessment includes the following:\n\n1. **Dilated Blood Vessels**: The dilated blood vessels in the retina indicate that there is increased blood flow through the retina. This can be caused by damage to the blood vessels or by inflammation. In diabetic retinopathy, the blood vessels are often affected by both factors.\n\n2. **Thickened Blood Vessels**: The thickened blood vessels can be caused by a variety of factors, including inflammation, fibrosis, and scarring. In diabetic retinopathy, the blood vessels are often affected by all three factors.\n\n3. **Retinal Edema**: Retinal edema is a condition where the retina"
+      },
+      {
+        "image_id": "IDRiD_003",
+        "true_grade": 4,
+        "pred_grade": 2,
+        "gold_reason": "Proliferative diabetic retinopathy is a sight-threatening stage characterized by advanced retinal ischemia and neovascularization.",
+        "pred_reason": "Diabetic retinopathy is a serious condition that can lead to vision loss if left untreated. The severity of diabetic retinopathy can be assessed using a variety of imaging techniques, including fluorescein angiography (FA) and optical coherence tomography (OCT). The clinical reasoning that supports the severity of diabetic retinopathy grade is based on the findings of the imaging tests.\n\nIn this case, the image shows diabetic retinopathy with a grade of 3. This indicates that there is significant damage to the retina, including the macula, which is the central area of the retina responsible for vision. The presence of hemorrhages and exudates suggests that there is significant inflammation and damage to the retina. The presence of these findings is indicative of advanced diabetic retinopathy, which can lead to vision loss if left untreated.\n\nThe clinical reasoning that supports this grade is based on the findings of the imaging tests. The presence of hemorrhages and exudates in the retina is a strong indicator of advanced diabetic retinopathy. These findings are typically seen in patients with advanced diabetic retinopathy and can lead to vision loss if left untreated. The presence of these findings is also indicative of the severity of the condition, which is grade 3 in this case."
+      },
+      {
+        "image_id": "IDRiD_004",
+        "true_grade": 4,
+        "pred_grade": 2,
+        "gold_reason": "The presence of proliferative changes signifies advanced retinal ischemia. Although macular edema is absent, the neovascular risk necessitates an urgent classification as proliferative.",
+        "pred_reason": "Diabetic retinopathy is a serious condition that affects the blood vessels in the retina, the tissue that lines the back of the eye. It is caused by high blood sugar levels, which can damage the blood vessels in the retina. The severity of diabetic retinopathy can be classified into different grades based on the extent of damage to the blood vessels in the retina.\n\nIn the image provided, the diabetic retinopathy grade appears to be grade 3. This grade indicates a moderate degree of damage to the blood vessels in the retina. The presence of new blood vessels (neovascularization) and the presence of hemorrhages (bleeding into the retina) are characteristic features of grade 3 diabetic retinopathy. These changes can lead to vision loss if left untreated.\n\nClinical reasoning supporting this diagnosis includes:\n\n1. **New Blood Vessels**: The presence of new blood vessels (neovascularization) in the retina is a hallmark of grade 3 diabetic retinopathy. These new blood vessels can grow from the retina itself or from the choroid, the outer layer of the retina.\n\n2. **Hemorrhages**: Hemorrhages are also common in grade 3 diabetic retinopathy. They can occur in the retina itself or in the vit"
+      },
+      {
+        "image_id": "IDRiD_005",
+        "true_grade": 4,
+        "pred_grade": 2,
+        "gold_reason": "This case is classified as proliferative due to the presence of advanced ischemic markers. The concurrent macular edema significantly increases the risk of vision loss, requiring immediate attention.",
+        "pred_reason": "Diabetic retinopathy is a serious condition that can lead to vision loss if left untreated. The severity of diabetic retinopathy can be assessed using a variety of clinical signs and symptoms, including:\n\n1. **Retinal Vein Occlusion (RVO)**: This is a serious complication where the blood flow to the retina is blocked. It can lead to vision loss and may require treatment with laser therapy or surgery.\n\n2. **Retinal Detachment**: This occurs when the retina pulls away from the back of the eye, causing vision loss. It can be treated with surgery or laser therapy.\n\n3. **Macular Edema**: This is a condition where fluid accumulates in the center of the retina, leading to vision loss. It can be treated with medication or surgery.\n\n4. **Retinal Neovascularization**: This is a type of growth on the retina that can lead to bleeding and vision loss. It can be treated with laser therapy or medication.\n\nIn the image you provided, the presence of a large, dark spot in the center of the retina, which is characteristic of diabetic retinopathy, suggests a high risk of severe complications. The presence of blood vessels that appear to be dilated and branching, which can indicate the presence of diabetic ret"
+      }
+    ]
+  },
+  "finetuned_qlora": {
+    "metrics": {
+      "n": 103,
+      "accuracy": 0.5437,
+      "qwk": 0.6217,
+      "rougeL": 0.2349,
+      "bertscore_f1": 0.2869,
+      "grade_parse_failures": 0,
+      "total_inference_s": 489.41,
+      "sec_per_image": 4.752,
+      "total_cost_usd": 0.0,
+      "cost_per_image_usd": 0.0
+    },
+    "sample_predictions": [
+      {
+        "image_id": "IDRiD_001",
+        "true_grade": 4,
+        "pred_grade": 4,
+        "gold_reason": "The presence of significant microvascular damage associated with PDR indicates high risk of progression to vision-threatening complications like vitreous hemorrhage or neovascular glaucoma.",
+        "pred_reason": "The presence of cotton-wool spots and extensive hemorrhages indicates significant retinal ischemia, classifying this as severe NPDR. The macular-edema risk is high (level 2), suggesting that the hard exudates and hemorrhages are threatening the central fovea."
+      },
+      {
+        "image_id": "IDRiD_002",
+        "true_grade": 4,
+        "pred_grade": 0,
+        "gold_reason": "This grade confirms proliferative disease, with additional findings suggesting a concurrent risk of macular edema that threatens central visual acuity.",
+        "pred_reason": "The presence of microaneurysms and hemorrhages beyond a single quadrant justifies the Moderate NPDR classification. The macular-edema risk of 2 indicates that these lesions are likely threatening the central fovea, requiring close monitoring."
+      },
+      {
+        "image_id": "IDRiD_003",
+        "true_grade": 4,
+        "pred_grade": 2,
+        "gold_reason": "Proliferative diabetic retinopathy is a sight-threatening stage characterized by advanced retinal ischemia and neovascularization.",
+        "pred_reason": "The presence of multiple microaneurysms and hemorrhages in multiple quadrants, alongside hard exudates, confirms moderate NPDR. The macular-edema risk of 2 indicates that these exudative lesions are threatening the central macula, requiring close monitoring."
+      },
+      {
+        "image_id": "IDRiD_004",
+        "true_grade": 4,
+        "pred_grade": 0,
+        "gold_reason": "The presence of proliferative changes signifies advanced retinal ischemia. Although macular edema is absent, the neovascular risk necessitates an urgent classification as proliferative.",
+        "pred_reason": "The fundus examination shows no evidence of microaneurysms, hemorrhages, or other characteristic signs of diabetic retinopathy. The retinal vasculature and parenchyma appear within normal limits."
+      },
+      {
+        "image_id": "IDRiD_005",
+        "true_grade": 4,
+        "pred_grade": 0,
+        "gold_reason": "This case is classified as proliferative due to the presence of advanced ischemic markers. The concurrent macular edema significantly increases the risk of vision loss, requiring immediate attention.",
+        "pred_reason": "The presence of microaneurysms and hemorrhages beyond a single quadrant justifies the Moderate NPDR classification. The macular-edema risk of 2 indicates that these lesions are likely involving or threatening the central macula, requiring close monitoring."
+      }
+    ]
+  }
+}

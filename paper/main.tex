@@ -1,0 +1,215 @@
+% IDRiD-VQA — ACL-format preprint.
+% Requires the official ACL style files (acl.sty, acl_natbib.bst) from
+% https://github.com/acl-org/acl-style-files — place them alongside this file.
+% Compile:  pdflatex main ; bibtex main ; pdflatex main ; pdflatex main
+\documentclass[11pt]{article}
+\usepackage[review]{acl}       % remove [review] for the camera-ready
+\usepackage{times}
+\usepackage{latexsym}
+\usepackage[T1]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage{microtype}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{amsmath}
+\usepackage{url}
+
+\title{IDRiD-VQA: Fine-Tuning a 2B Vision-Language Model for Explainable
+Diabetic Retinopathy Grading on Consumer Hardware}
+
+\author{Yuvraj Verma \\
+  \texttt{yuvrajverma282004@gmail.com} \\}
+
+\begin{document}
+\maketitle
+
+\begin{abstract}
+Diabetic retinopathy (DR) is a leading cause of preventable blindness, and
+automated grading systems can extend screening to under-served populations.
+However, most high-accuracy DR models are opaque classifiers, and recent
+medical vision-language models (VLMs) that offer explanations require
+data-center GPUs to train. We present \textbf{IDRiD-VQA}, a pipeline that
+fine-tunes \mbox{Qwen2-VL-2B-Instruct} for \emph{explainable} DR grading
+entirely on a single 6\,GB consumer GPU (NVIDIA RTX 4050). We construct a
+visual-question-answering dataset of \textbf{2{,}064} clinically grounded QA
+pairs from the IDRiD dataset, covering grade identification, lesion
+identification, clinical reasoning, and patient recommendation, and fine-tune
+the model with 4-bit QLoRA using Unsloth. On the 103-image held-out test split,
+fine-tuning raises exact-match grading accuracy from \textbf{31.1\% to 54.4\%}
+and quadratic weighted kappa (QWK) from \textbf{0.00 to 0.62} (substantial
+agreement), roughly triples ROUGE-L explanation overlap ($0.08\!\rightarrow\!0.23$),
+and halves inference latency, while producing structured clinical reports at zero
+marginal per-image cost. The entire fine-tune runs in about 65 minutes within
+3.52\,GB of VRAM. We release the dataset, adapter weights, and code to support
+reproducible, low-resource medical VLM research.
+\end{abstract}
+
+\section{Introduction}
+Diabetic retinopathy affects roughly one in three people living with diabetes
+and is a leading cause of vision loss worldwide. Screening programs rely on the
+grading of colour fundus photographs on the international 0--4 severity scale
+(No DR, Mild, Moderate, Severe, Proliferative), but the number of trained
+graders is limited. Deep-learning classifiers achieve strong grading accuracy,
+yet they typically output a single label with no justification, which limits
+clinician trust and regulatory acceptance.
+
+Vision-language models offer a path to \emph{explainable} grading: a model that
+both assigns a grade and articulates the retinal findings that support it.
+Unfortunately, training such models is usually assumed to require multiple
+high-memory GPUs, placing it out of reach for individual researchers and for
+institutions in low-resource settings---precisely where automated screening is
+most needed.
+
+In this work we ask whether a compact 2B-parameter VLM can be fine-tuned for
+explainable DR grading \emph{on a single 6\,GB laptop GPU}. Our contributions
+are: (1) \textbf{IDRiD-VQA}, a clinically grounded VQA dataset built from IDRiD
+labels; (2) a memory-frugal QLoRA recipe (4-bit weights, Unsloth gradient
+checkpointing, batch size 1 with gradient accumulation) that fits training in
+under 5.5\,GB of VRAM; and (3) an evaluation comparing the fine-tuned model
+against the zero-shot base model and a proprietary API baseline on grading
+accuracy, QWK, and explanation quality.
+
+\section{Related Work}
+\paragraph{Automated DR grading.} Convolutional classifiers trained on
+large fundus corpora (e.g., EyePACS, Messidor, APTOS) established strong
+grading baselines, and IDRiD~\citep{porwal2018idrid} added pixel-level lesion
+annotations for microaneurysms, hemorrhages, and exudates. These systems
+optimise QWK but do not explain their predictions.
+
+\paragraph{Medical vision-language models.} General VLMs such as the Qwen2-VL
+family~\citep{wang2024qwen2vl} and LLaVA-style models have been adapted to
+radiology and ophthalmology, producing free-text findings. Most reported
+adaptations rely on data-center hardware.
+
+\paragraph{Parameter-efficient fine-tuning.} LoRA~\citep{hu2021lora} and its
+4-bit quantized variant QLoRA~\citep{dettmers2023qlora} dramatically reduce the
+memory footprint of adaptation. Systems like Unsloth~\citep{unsloth} further cut
+memory via fused kernels and custom gradient checkpointing, enabling
+single-GPU fine-tuning of multimodal models. We combine these to bring
+explainable DR grading to consumer hardware.
+
+\section{Dataset Construction}
+\label{sec:data}
+We build on IDRiD, which provides 516 colour fundus images with expert DR grades
+(0--4) and a macular-edema risk label, together with lesion segmentation masks
+for microaneurysms (MA), hemorrhages (HE), hard exudates (EX) and soft exudates
+(SE) on a subset of images.
+
+\paragraph{Structured findings.} For each image we assemble a structured record:
+the DR grade, the macular-edema risk, and per-lesion presence flags. Lesion
+presence is read directly from the segmentation masks (non-zero pixels) where
+masks are available; for images in the grading-only subset we fall back to
+grade-conditioned clinical priors, and we record the provenance of every flag.
+
+\paragraph{QA generation.} From these structured findings---\emph{not} from the
+pixels---we prompt Gemini Flash models to write four QA pairs per image, covering
+(i) grade identification, (ii) lesion identification, (iii) clinical reasoning,
+and (iv) patient recommendation. Conditioning on labels rather than images
+prevents the generator from hallucinating findings and keeps every answer
+consistent with ground truth. Generation batches multiple cases per request,
+throttles to the API's free-tier rate limit, and---because that limit is
+per-model---cycles across a pool of Gemini flash models as each quota is
+exhausted, with a deterministic clinical-template fallback guaranteeing coverage.
+This yields \textbf{2{,}064 QA pairs} (four per image over all 516 images), every
+one Gemini-generated in our run. We adopt the canonical IDRiD split---\textbf{413
+training and 103 test images}---tracked by folder (the two sets reuse filenames),
+so no image appears in both splits.
+
+\section{Methodology}
+\label{sec:method}
+\paragraph{Model.} We fine-tune \mbox{Qwen2-VL-2B-Instruct} via the Unsloth
+\texttt{FastVisionModel} interface. The base weights are loaded in 4-bit
+(NF4) precision.
+
+\paragraph{QLoRA configuration.} We attach LoRA adapters of rank $r{=}16$ with
+$\alpha{=}16$ to all attention and MLP projections in both the language and
+vision towers, with no dropout and no bias terms. Only the adapters are trained.
+
+\paragraph{Memory-frugal training.} To fit a 6\,GB GPU we use: 4-bit base
+weights, Unsloth gradient checkpointing, per-device batch size 1 with gradient
+accumulation of 8 (effective batch 8), a maximum sequence length of 1024
+tokens, and bfloat16 activations (never fp32). Fundus images are resized so the
+longer side is at most 512 pixels, capping the number of visual tokens. We train
+for 3 epochs with the 8-bit AdamW optimiser, a linear schedule, and learning
+rate $2{\times}10^{-4}$. Only $28.9$M parameters ($1.45\%$ of the model) are
+trainable. In our runs the full 3-epoch fine-tune (618 optimiser steps over the
+1{,}652 training QA pairs) completes in \textbf{about 65 minutes} on a single
+laptop RTX 4050 and peaks at \textbf{3.52\,GB} of VRAM---well inside the 5.5\,GB
+budget---confirming that explainable DR grading can be trained on commodity
+hardware. Because \texttt{torch.compile}'s inductor backend requires a system C
+compiler unavailable in our WSL environment, we disable it and rely on Unsloth's
+Triton kernels; this trades a small amount of speed for portability.
+
+\section{Experiments}
+\label{sec:exp}
+\paragraph{Setup.} We evaluate on the 100-image test split. For grading we parse
+a 0--4 grade from each model's answer and report exact-match accuracy and
+quadratic weighted kappa (QWK), the standard DR metric. For explanations we
+report ROUGE-L and BERTScore against the reference clinical reasoning. We also
+report mean inference latency and marginal per-image cost.
+
+\paragraph{Baselines.} We compare (1) the zero-shot base Qwen2-VL-2B, (2) our
+fine-tuned QLoRA model, and (3) GPT-4o-mini zero-shot via API (when an API key
+is available). Results are in Table~\ref{tab:results}.
+
+\input{results_table.tex}
+
+\section{Analysis}
+\label{sec:analysis}
+\paragraph{Grading.} Fine-tuning raises exact-match accuracy from 31.1\% to
+54.4\% and, more tellingly, QWK from 0.00 to 0.62. The zero-shot base model is
+effectively non-discriminative: it emits verbose, generic descriptions and
+gravitates to the majority ``moderate'' class, so its grades carry no ordinal
+signal (QWK $\approx 0$). The fine-tuned model instead produces calibrated 0--4
+grades that correlate substantially with expert labels. Because grading is
+ordinal, QWK---which penalises a No-DR/Proliferative confusion far more than an
+adjacent error---is the clinically meaningful metric, and the jump to 0.62
+(substantial agreement, Landis--Koch) is the headline result.
+
+\paragraph{Explanations.} ROUGE-L nearly triples ($0.08\!\rightarrow\!0.23$) and
+BERTScore rises from $-0.03$ to $0.29$. Qualitatively, the base model hallucinates
+irrelevant machinery (fluorescein angiography, OCT, retinal-vein occlusion),
+whereas the fine-tuned model writes concise, lesion-grounded reasoning---e.g.\
+``cotton-wool spots and extensive hemorrhages indicate significant retinal
+ischemia, classifying this as severe NPDR.'' It is also $2\times$ faster
+(4.75 vs.\ 9.73\,s/image) because it stops at a structured answer instead of
+running to the token limit.
+
+\paragraph{Failure modes and limitations.} Proliferative DR (grade~4) is the
+hardest class: our lesion flags derive from grade-conditioned priors rather than
+per-image masks, so the training reasoning for severe~(3) and proliferative~(4)
+disease is near-identical, blurring that boundary. The grade and the reasoning are
+produced by independent prompts and can occasionally disagree; joint decoding is a
+natural fix. Further limitations include the modest size and single-centre nature
+of IDRiD, the label-conditioned generator (which bounds explanation diversity),
+and the absence of a clinician faithfulness study. We did not run the GPT-4o-mini
+baseline (no API key was available in our environment); the evaluation code
+supports it when a key is provided.
+
+\section{Conclusion}
+We showed that explainable DR grading can be fine-tuned end-to-end on a single
+6\,GB consumer GPU. By pairing a compact VLM with a label-grounded QA dataset
+and a 4-bit QLoRA recipe, IDRiD-VQA delivers structured, auditable DR reports at
+low latency and zero marginal cost. We release the dataset, adapter weights, and
+code.\footnote{Model: \url{https://huggingface.co/vermayuvraj/idrid-qwen2vl-2b-qlora};
+dataset: \url{https://huggingface.co/datasets/vermayuvraj/idrid-vqa}.} Future work
+includes expanding to multi-dataset training, validating
+explanation faithfulness with clinicians, and a MICCAI workshop evaluation.
+
+\section*{Ethics Statement}
+This work is a research prototype and is \emph{not} a medical device. Model
+outputs must not be used for diagnosis or treatment. The dataset is derived from
+the publicly available IDRiD dataset under its license; synthetic explanations
+are model-generated and may contain errors.
+
+\section*{Limitations}
+The model is trained and evaluated only on IDRiD, a single-center dataset of 516
+images, so generalisation to other cameras and populations is unverified.
+Synthetic QA is conditioned on labels, and lesion flags for the grading-only
+subset are inferred from grade priors rather than measured. Grade parsing from
+free text can fail; we report parse-failure counts alongside accuracy.
+
+\bibliography{references}
+\bibliographystyle{acl_natbib}
+
+\end{document}
