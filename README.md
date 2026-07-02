@@ -1,5 +1,7 @@
 # IDRiD-VQA: Explainable Diabetic Retinopathy Grading with a 2B VLM
 
+![IDRiD-VQA](assets/thumbnail.png)
+
 Fine-tune **Qwen2-VL-2B-Instruct** with **4-bit QLoRA (Unsloth)** on the IDRiD
 dataset to grade diabetic retinopathy (0–4) **and** generate structured clinical
 explanations — trained end-to-end on a single **6 GB consumer GPU** (RTX 4050).
