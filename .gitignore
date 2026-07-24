@@ -32,3 +32,8 @@ data/raw/_staging/
 .DS_Store
 unsloth_compiled_cache/
 ~$*
+paper/_preview/
+paper/*.aux
+paper/*.out
+paper/*.log
+paper/*.xdv

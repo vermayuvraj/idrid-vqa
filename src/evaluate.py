@@ -291,6 +291,9 @@ def main() -> int:
     out = {name: {"metrics": r["metrics"], "sample_predictions": r["predictions"][:5]}
            for name, r in results.items()}
     RESULTS_PATH.write_text(json.dumps(out, indent=2))
+    # full per-image predictions (for confusion matrices / error analysis)
+    full = {name: r["predictions"] for name, r in results.items()}
+    (RESULTS_PATH.parent / "predictions_full.json").write_text(json.dumps(full, indent=2))
     print(f"\n[ok] wrote {RESULTS_PATH.relative_to(PROJECT_ROOT)}")
     print_table(results)
     return 0
